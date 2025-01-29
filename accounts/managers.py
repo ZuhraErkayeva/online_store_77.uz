@@ -14,7 +14,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', False)
         phone_number = extra_fields.pop('phone_number')
         password = extra_fields.pop('password')
-        return self._create_user(phone_number=phone_number, password=password)
+        return self._create_user(phone_number=phone_number, password=password, **extra_fields)
 
     def create_superuser(self, password, phone_number, **extra_fields):
         extra_fields.setdefault('is_staff', True)
@@ -26,7 +26,7 @@ class UserManager(BaseUserManager):
 
         if extra_fields.get('is_superuser') is not True:
             raise ValidationError('Superuser must have is_superuser=True')
-
+        return self._create_user(phone_number=phone_number, password=password, **extra_fields)
 
     def create_seller(self, data):
         data['role'] = self.model.Role.SELLER
